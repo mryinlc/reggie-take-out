@@ -12,6 +12,11 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
+  redis:
+    host: 192.168.150.128
+    port: 6379
+    password: 123456
+    database: 0
 #  配置文件方式配置静态资源路径
 #  web:
 #    resources:
