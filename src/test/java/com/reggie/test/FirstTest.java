@@ -1,8 +1,6 @@
 package com.reggie.test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.reggie.pojo.Employee;
 import com.reggie.pojo.User;
 import com.reggie.service.EmployeeService;
 import org.junit.jupiter.api.Test;
@@ -10,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,8 +28,9 @@ public class FirstTest {
         user.setId((long) 123);
         user.setPhone("12345678910");
         user.setName("test");
-        redisTemplate.opsForValue().set("user", user);
-        Object o = redisTemplate.opsForValue().get("user");
-        System.out.println(user);
+        List<User> users = Arrays.asList(user);
+        redisTemplate.opsForValue().set("users", users);
+        users = (List<User>) redisTemplate.opsForValue().get("users");
+        users.forEach(System.out::println);
     }
 }

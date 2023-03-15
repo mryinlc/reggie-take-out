@@ -17,6 +17,10 @@ spring:
     port: 6379
     password: 123456
     database: 0
+  # 设置spring cache缓存过期时间
+  cache:
+    redis:
+      time-to-live: 1800000
 #  配置文件方式配置静态资源路径
 #  web:
 #    resources:
