@@ -34,7 +34,11 @@ public class CheckLoginFilter implements Filter {
                 "/front/**",
                 "/u",
                 "/user/code",
-                "/user/login"
+                "/user/login",
+                "/doc.html",
+                "/webjars/**",
+                "/swagger-resources",
+                "/v2/api-docs"
                 // "/common/**"
         };
         for (String noFilterUri : noFilterUris) {

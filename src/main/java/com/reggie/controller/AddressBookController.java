@@ -6,6 +6,10 @@ import com.reggie.common.BaseContext;
 import com.reggie.common.R;
 import com.reggie.pojo.AddressBook;
 import com.reggie.service.AddressBookService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,12 +18,14 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/addressBook")
+@Api(tags = "地址操作相关接口")
 public class AddressBookController {
     @Autowired
     private AddressBookService addressBookService;
 
     private LambdaQueryWrapper<AddressBook> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 
+    @ApiOperation("获取用户地址列表接口")
     @GetMapping("/list")
     public R<List<AddressBook>> getAddressList() {
         lambdaQueryWrapper.clear();
@@ -29,6 +35,11 @@ public class AddressBookController {
     }
 
     @GetMapping("/{id}")
+    @ApiOperation("通过地址id获取用户地址接口")
+    @ApiImplicitParams({
+            // 对于路径中的参数，需要指定type为path，type值为query，且此时的name应为路径中指定的参数名，而不是方法中的参数名
+            @ApiImplicitParam(name = "id", value = "地址id", required = true, type = "path")
+    })
     public R<AddressBook> getAddressById(@PathVariable("id") long addressId) {
         AddressBook addressBook = addressBookService.getById(addressId);
         return addressBook != null ? R.success(addressBook) : R.error("指定地址不存在");

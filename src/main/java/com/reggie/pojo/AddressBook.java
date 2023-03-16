@@ -2,6 +2,8 @@ package com.reggie.pojo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -10,18 +12,22 @@ import java.time.LocalDateTime;
  * 地址簿
  */
 @Data
+@ApiModel("地址信息")
 public class AddressBook implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty("地址id")
     private Long id;
 
 
     //用户id
+    @ApiModelProperty("用户id")
     private Long userId;
 
 
     //收货人
+    @ApiModelProperty("收货人")
     private String consignee;
 
 
