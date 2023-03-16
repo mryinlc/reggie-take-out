@@ -11,8 +11,8 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 @ControllerAdvice(annotations = {RestController.class, Controller.class})
 @Slf4j
-@ResponseBody
 public class GlobalExceptionHandler {
+    @ResponseBody
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public R<Object> duplicateEntryExceptionHandler(SQLIntegrityConstraintViolationException ex) {
         String errMsg = ex.getMessage();
@@ -22,6 +22,7 @@ public class GlobalExceptionHandler {
         return R.error("未知错误");
     }
 
+    @ResponseBody
     @ExceptionHandler(CustomException.class)
     public R<Object> customExceptionHandler(CustomException ex) {
         return R.error(ex.getMessage());

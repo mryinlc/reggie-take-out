@@ -182,6 +182,7 @@
             logoutApi().then((res)=>{
               if(res.code === 1){
                 localStorage.removeItem('userInfo')
+                localStorage.removeItem('jwt')
                 window.location.href = '/backend/page/login/login.html'
               }
             })

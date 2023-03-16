@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.reggie.common.R;
 import com.reggie.pojo.User;
 import com.reggie.service.UserService;
+import com.reggie.utils.JwtUtil;
 import com.reggie.utils.ValidateCodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public R<Object> login(@RequestBody Map map, HttpSession session) {
+    public R<String> login(@RequestBody Map map, HttpSession session) {
         // String saveCode = session.getAttribute("code").toString();
         String phone = (String) map.get("phone");
         if (phone == null)
@@ -58,7 +59,8 @@ public class UserController {
         session.setAttribute("user", user);
         // 删除缓存中的验证码
         redisTemplate.delete(phone);
-        return R.success(null);
+        String jwtToken = JwtUtil.generateJwtToken(user.getId(), user.getName(), "user");
+        return R.success(jwtToken);
     }
 
     @PostMapping("/loginout")

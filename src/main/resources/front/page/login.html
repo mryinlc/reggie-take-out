@@ -87,6 +87,7 @@
                     this.loading = false
                     if (res.code === 1) {
                         sessionStorage.setItem("userPhone", this.form.phone)
+                        localStorage.setItem('jwt', res.data)
                         window.requestAnimationFrame(() => {
                             window.location.href = '/front/index.html'
                         })

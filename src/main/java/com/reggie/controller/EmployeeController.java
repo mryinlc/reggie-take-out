@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.reggie.common.R;
 import com.reggie.pojo.Employee;
 import com.reggie.service.EmployeeService;
+import com.reggie.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.DigestUtils;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/employee")
@@ -41,7 +41,8 @@ public class EmployeeController {
         if (e.getStatus() == 0)
             return R.error("当前账户被禁用");
         request.getSession().setAttribute("employee", e);
-        return R.success(e);
+        String jwtToken = JwtUtil.generateJwtToken(e.getId(), e.getName(), "employee");
+        return R.success(e).add("jwt", jwtToken);
     }
 
     @PostMapping("/logout")

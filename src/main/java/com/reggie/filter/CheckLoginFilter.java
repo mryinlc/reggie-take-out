@@ -3,9 +3,10 @@ package com.reggie.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.reggie.common.BaseContext;
+import com.reggie.common.CustomException;
 import com.reggie.common.R;
-import com.reggie.pojo.Employee;
-import com.reggie.pojo.User;
+import com.reggie.utils.JwtUtil;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
 
@@ -48,7 +49,20 @@ public class CheckLoginFilter implements Filter {
                 return;
             }
         }
-        Employee e = (Employee) (req.getSession().getAttribute("employee"));
+        String jwtToken = req.getHeader("Authorization");
+        // exceptionHandler仅能处理controller层的异常，而filter位于controller层之前，所以filter抛出的异常无法被exceptionHandler处理
+        try {
+            Claims claims = JwtUtil.getClaimsFromJwt(jwtToken);
+            BaseContext.setUserId(claims.get("id", Long.class));
+            chain.doFilter(request, response);
+            return;
+        } catch (CustomException e) {
+            log.info("禁止未登录用户访问: {}", uri);
+            PrintWriter writer = response.getWriter();
+            writer.print(JSON.toJSON(R.error("NOTLOGIN")));
+        }
+
+        /*Employee e = (Employee) (req.getSession().getAttribute("employee"));
         if (e != null) {
             log.info("允许已登录用户访问: {}", uri);
             BaseContext.setUserId(e.getId());
@@ -62,10 +76,10 @@ public class CheckLoginFilter implements Filter {
             BaseContext.setUserId(user.getId());
             chain.doFilter(request, response);
             return;
-        }
+        }*/
 
-        log.info("禁止未登录用户访问: {}", uri);
+        /*log.info("禁止未登录用户访问: {}", uri);
         PrintWriter writer = response.getWriter();
-        writer.print(JSON.toJSON(R.error("NOTLOGIN")));
+        writer.print(JSON.toJSON(R.error("NOTLOGIN")));*/
     }
 }
